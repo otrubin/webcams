@@ -42,6 +42,7 @@ export default {
     },
     variant: {
       type: String,
+      default: '',
     },
     filterTagString: {
       type: String,

@@ -59,7 +59,7 @@ function prepareWebcams(webcams) {
 }
 
 const {
-  COUNTRIES, REGIONS, WEBCAM_COUNTER, CURRENT_COUNTRY, WEBCAMS,
+  COUNTRIES, REGIONS, WEBCAM_COUNTER, CURRENT_COUNTRY, WEBCAMS, CURRENT_PAGE, CURRENT_REGION,
 } = mutations;
 
 const webcamsStore = {
@@ -68,18 +68,11 @@ const webcamsStore = {
     countries: [],
     regions: {},
     webcams: [],
-    collections: [
-      {
-        name: 'Россия',
-        webcams: [],
-      },
-      {
-        name: 'Бавария',
-        webcams: [],
-      },
-    ],
     webcamCounter: 0, // number of webcams found
     currentCountryId: '',
+    currentRegionId: '',
+    webcamPerPage: 10,
+    webcamCurrentPage: 1,
   },
   mutations: {
     [COUNTRIES](state, payload) {
@@ -97,12 +90,22 @@ const webcamsStore = {
     [CURRENT_COUNTRY](state, value) {
       state.currentCountryId = value;
     },
+    [CURRENT_PAGE](state, value) {
+      state.webcamCurrentPage = value;
+    },
+    [CURRENT_REGION](state, value) {
+      state.currentRegionId = value;
+    },
   },
   getters: {
     getCountryList: ({ countries }) => countries,
     getRegions: ({ regions, currentCountryId }) => regions[currentCountryId],
     getCurrentCountryId: ({ currentCountryId }) => currentCountryId,
     webcams: ({ webcams }) => webcams,
+    webcamCounter: ({ webcamCounter }) => webcamCounter,
+    webcamPerPage: ({ webcamPerPage }) => webcamPerPage,
+    webcamCurrentPage: ({ webcamCurrentPage }) => webcamCurrentPage,
+    currentRegionId: ({ currentRegionId }) => currentRegionId,
   },
   actions: {
     initWebcamsStore: {
@@ -132,9 +135,20 @@ const webcamsStore = {
         console.log(error);
       }
     },
-    async fetchWebcams({ commit }, regionId) {
+    async fetchWebcams({ commit, getters }, regionId) {
       try {
-        const response = await axios.get(`list/region=${regionId}?show=webcams:image,player`);
+        if (regionId) {
+          if (regionId !== getters.currentRegionId) {
+            commit('CURRENT_PAGE', 1); // при изменении региона сбрасывает текущую страницу
+          }
+          commit('CURRENT_REGION', regionId);
+        }
+        const limit = getters.webcamPerPage;
+        const offset = getters.webcamPerPage * (getters.webcamCurrentPage - 1);
+        const request = `list/region=${getters.currentRegionId}/orderby=popularity/limit=${limit},${offset}?show=webcams:image,player`;
+        const response = await axios.get(
+          request,
+        );
         commit('WEBCAMS', prepareWebcams(response.result.webcams));
         commit('WEBCAM_COUNTER', response.result.total);
       } catch (error) {
@@ -144,6 +158,10 @@ const webcamsStore = {
     async changeCurrentCountry({ commit, dispatch }, countryId) {
       await dispatch('fetchRegions', countryId);
       commit('CURRENT_COUNTRY', countryId);
+    },
+    changeCurrentPage({ commit, dispatch }, page) {
+      commit('CURRENT_PAGE', page);
+      dispatch('fetchWebcams');
     },
   },
 };

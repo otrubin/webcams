@@ -65,7 +65,7 @@ export default {
     error: '',
   }),
   computed: {
-    ...mapGetters('tags', ['tagsAsArray']),
+    ...mapGetters('tags', ['tagsAsArray', 'webcamFromId']),
     isError: {
       get() {
         return Boolean(this.error);
@@ -109,7 +109,6 @@ export default {
       }
     },
     assignTags(bvModalEvt) {
-      // this.addTags(this.selectedTags);
       const webcamObj = JSON.parse(JSON.stringify(this.webcamData));
       webcamObj.tags = this.selectedTags;
       try {
@@ -119,10 +118,27 @@ export default {
         bvModalEvt.preventDefault();
       }
     },
+    // формируем список доступных
+    initTagLists() {
+      this.aviableTags = this.tagsAsArray.sort();// доступные теги
+
+      const webcam = this.webcamFromId(this.webcamData.id);
+      if (webcam) { // если веб-камере уже назначены теги, получаем их
+        this.selectedTags = webcam.tags;
+        // удаляем из списка доступных тегов назначенные теги
+        for (let i = 0; i < this.selectedTags.length; i += 1) {
+          const tag = this.selectedTags[i];
+          const index = this.aviableTags.findIndex((item) => item === tag);
+          if (index !== -1) {
+            this.aviableTags.splice(index, 1);
+          }
+        }
+      }
+    },
+    // вызывается из SearchList.vue
     handleWebcamTags(webcamData) {
       this.webcamData = webcamData;
-      this.aviableTags = this.tagsAsArray.sort();
-      this.selectedTags = [];
+      this.initTagLists();
       this.newTagValue = '';
       this.error = '';
       this.$bvModal.show('webcam-tags');

@@ -16,7 +16,6 @@
       variant="primary" @click="emitSearchWebcams">
       Получить камеры
     </b-button>
-    <div class="mt-3 mb-3">Selected region: <strong>{{ selectedRegionId }}</strong></div>
   </div>
 </template>
 

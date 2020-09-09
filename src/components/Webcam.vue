@@ -7,18 +7,48 @@
         Просмотреть
       </b-button>
       <b-button variant="success" size="sm" @click="emitAddToFavorite(webcamData)">
-        В избранное
+        {{ favoriteButtonTitle }}
       </b-button>
+    </div>
+    <div v-if="hasTags" class="tag-wrap">
+      <p class="tagTitle"><b>Теги:</b></p>
+      <TagList
+          :tagList="tags"
+          :autoClose="false"
+          variant="success"
+        />
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import TagList from './TagList.vue';
+
 export default {
   name: 'Webcam',
+  components: {
+    TagList,
+  },
   props: {
     webcamData: {
       type: Object,
+    },
+  },
+  // data: () => ({
+  //   tags: [],
+  // }),
+  computed: {
+    ...mapGetters('tags', ['webcamFromId', 'webcams']),
+    tags() {
+      const webcam = this.webcams[this.webcamData.id];
+      return webcam ? webcam.tags : [];
+    },
+    hasTags() {
+      return Boolean(this.tags.length);
+    },
+    favoriteButtonTitle() {
+      return this.hasTags ? 'Изменить теги' : 'В избранное';
     },
   },
   methods: {
@@ -29,6 +59,12 @@ export default {
       this.$emit('onAddToFavorite', this.webcamData);
     },
   },
+  // created() {
+  //   const webcam = this.webcamFromId(this.webcamData.id);
+  //   if (webcam) {
+  //     this.tags = webcam.tags;
+  //   }
+  // },
 };
 </script>
 
@@ -37,8 +73,9 @@ export default {
     position: relative;
     margin-bottom: 20px;
     background-color: #f2f2f2;
-    text-align: center;
     transition: all 0.3s ease;
+    text-align: center;
+    max-width: 400px;
   }
   .webcam h5{
     font-weight: bold;
@@ -51,5 +88,13 @@ export default {
   .btn:hover{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
     transform: scale(1.02);
+  }
+  .tag-wrap{
+    padding: 0 15px 15px;
+    text-align: left;
+  }
+  .tagTitle{
+    margin: 0;
+    line-height: 1;
   }
 </style>

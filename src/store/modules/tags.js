@@ -14,6 +14,7 @@ const tagStore = {
     tags: ({ tags }) => tags,
     tagsAsArray: ({ tags }) => Array.from(tags.keys()),
     webcams: ({ webcams }) => webcams,
+    webcamFromId: ({ webcams }) => (webcamId) => webcams[webcamId],
   },
   mutations: {
     [TAGS_ADD_TAG](state, payload) {

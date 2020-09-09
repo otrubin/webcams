@@ -33,6 +33,9 @@ export default {
   methods: {
     ...mapActions('webcams', ['fetchWebcams']),
     onSearchWebcams(selectedRegionId) {
+      if (this.$route.query.page) {
+        this.$router.push(this.$route.path);
+      }
       this.fetchWebcams(selectedRegionId);
     },
   },
