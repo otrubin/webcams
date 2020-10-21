@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
-import Search from '../views/Search.vue';
+import Favorite from '../views/Favorite.vue';
+import TagsManagement from '../views/TagsManagement.vue';
 
 Vue.use(VueRouter);
 
@@ -12,9 +13,14 @@ const routes = [
     component: Home,
   },
   {
-    path: '/search',
-    name: 'search',
-    component: Search,
+    path: '/favorite',
+    name: 'favorite',
+    component: Favorite,
+  },
+  {
+    path: '/tags-management',
+    name: 'tags-management',
+    component: TagsManagement,
   },
 ];
 

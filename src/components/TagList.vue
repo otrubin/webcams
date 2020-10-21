@@ -64,8 +64,11 @@ export default {
 </script>
 
 <style scoped>
-.empty-tag-list{
-  font-size: 1rem;
-  color: #aaaaaa;
-}
+  .tag-list {
+    word-wrap: break-word;
+  }
+  .empty-tag-list{
+    font-size: 1rem;
+    color: #aaaaaa;
+  }
 </style>

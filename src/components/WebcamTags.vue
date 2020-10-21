@@ -33,7 +33,7 @@
           @keypress.enter="addNewTag"
         ></b-form-input>
 
-        <h5>Доступные теги:</h5>
+        <h5>Существующие теги:</h5>
         <TagList
           :tagList="aviableTags"
           canChoose
@@ -92,7 +92,7 @@ export default {
     moveTag(tag, source, destination) {
       const sourceIndex = source.indexOf(tag);
       if (sourceIndex === -1) {
-        return false; // нет тега, тогда в источнике ничего не переносим
+        return false; // нет тега, тогда ничего не переносим
       }
       source.splice(sourceIndex, 1);
       destination.push(tag);
@@ -135,7 +135,7 @@ export default {
         }
       }
     },
-    // вызывается из SearchList.vue
+    // вызывается из SearchList.vue, FavoriteList.vue
     handleWebcamTags(webcamData) {
       this.webcamData = webcamData;
       this.initTagLists();

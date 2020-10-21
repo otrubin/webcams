@@ -95,6 +95,7 @@ export default {
   margin: 5px;
   cursor: default;
   transition: all 0.3s;
+  white-space: nowrap;
 }
 .tag:hover {
   background-color: #0f77d8;

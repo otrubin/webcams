@@ -1,6 +1,5 @@
 <template>
-  <div class="search-list">
-    <h2>Результаты поиска</h2>
+  <div class="search-list mt-4">
     <template v-if="isSearchExists">
       <b-row>
         <b-col md="6" v-for="(webcamData, key) in webcams" :key="key">
