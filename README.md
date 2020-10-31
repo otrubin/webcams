@@ -1,5 +1,9 @@
 # webcams
 
+Учебный проект. Написан с использованием VUE v.2.
+Взято API [https://api.windy.com/webcams/docs/](https://api.windy.com/webcams/docs/)
+
+
 ## Project setup
 ```
 npm install
@@ -15,10 +19,3 @@ npm run serve
 npm run build
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

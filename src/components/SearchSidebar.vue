@@ -7,6 +7,7 @@
         :options="countries"
         :select-size="10">
       </b-form-select>
+      <Loader :isShowLoader="isCountriesLoader"/>
     </div>
     <h3 class="mt-4">Выберите регион</h3>
     <div class="select-region-wrap">
@@ -15,6 +16,7 @@
         :options="getRegions"
         :select-size="10">
       </b-form-select>
+      <Loader :isShowLoader="isRegionsLoader"/>
     </div>
     <b-button class="mt-3" :disabled="!Boolean(selectedRegionId)"
       variant="primary" @click="emitSearchWebcams">
@@ -25,11 +27,11 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-// import Loader from './Loader.vue';
+import Loader from './Loader.vue';
 
 export default {
   name: 'SearchSidebar',
-  // components: { Loader },
+  components: { Loader },
   props: {
     countries: {
       type: Array,
@@ -43,6 +45,7 @@ export default {
   }),
   computed: {
     ...mapGetters('webcams', ['getRegions']),
+    ...mapGetters('loaders', ['isCountriesLoader', 'isRegionsLoader']),
   },
   methods: {
     ...mapActions('webcams', ['changeCurrentCountry']),

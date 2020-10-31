@@ -114,17 +114,21 @@ const webcamsStore = {
         dispatch('fetchCountries');
       },
     },
-    async fetchCountries({ commit }) {
+    async fetchCountries({ commit, dispatch }) {
       try {
+        dispatch('loaders/setStateCountriesLoader', true, { root: true });
         const response = await axios.get('list/?show=countries');
         commit('COUNTRIES', prepareCountries(response.result.countries));
         commit('WEBCAM_COUNTER', response.result.total);
       } catch (error) {
         console.log(error);
+      } finally {
+        dispatch('loaders/setStateCountriesLoader', false, { root: true });
       }
     },
-    async fetchRegions({ commit }, countryId) {
+    async fetchRegions({ commit, dispatch }, countryId) {
       try {
+        dispatch('loaders/setStateRegionsLoader', true, { root: true });
         const response = await axios.get(`list/country=${countryId}?show=regions`);
         commit('REGIONS', {
           countryId,
@@ -133,10 +137,13 @@ const webcamsStore = {
         commit('WEBCAM_COUNTER', response.result.total);
       } catch (error) {
         console.log(error);
+      } finally {
+        dispatch('loaders/setStateRegionsLoader', false, { root: true });
       }
     },
-    async fetchWebcams({ commit, getters }, regionId) {
+    async fetchWebcams({ commit, getters, dispatch }, regionId) {
       try {
+        dispatch('loaders/setStateWebcamsLoader', true, { root: true });
         if (regionId) {
           if (regionId !== getters.currentRegionId) {
             commit('CURRENT_PAGE', 1); // при изменении региона сбрасывает текущую страницу
@@ -146,13 +153,13 @@ const webcamsStore = {
         const limit = getters.webcamPerPage;
         const offset = getters.webcamPerPage * (getters.webcamCurrentPage - 1);
         const request = `list/region=${getters.currentRegionId}/orderby=popularity/limit=${limit},${offset}?show=webcams:image,player`;
-        const response = await axios.get(
-          request,
-        );
+        const response = await axios.get(request);
         commit('WEBCAMS', prepareWebcams(response.result.webcams));
         commit('WEBCAM_COUNTER', response.result.total);
       } catch (error) {
         console.log(error);
+      } finally {
+        dispatch('loaders/setStateWebcamsLoader', false, { root: true });
       }
     },
     async changeCurrentCountry({ commit, dispatch }, countryId) {

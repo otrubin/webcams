@@ -22,6 +22,7 @@
     </template>
     <ModalView ref="modalView" />
     <WebcamTags ref="webcamTags" />
+    <Loader :isShowLoader="isWebcamsLoader" :isFixed="true"/>
   </div>
 </template>
 
@@ -31,6 +32,7 @@ import Webcam from './Webcam.vue';
 import WebcamPagination from './WebcamPagination.vue';
 import ModalView from './ModalView.vue';
 import WebcamTags from './WebcamTags.vue';
+import Loader from './Loader.vue';
 
 export default {
   name: 'SearchList',
@@ -39,6 +41,7 @@ export default {
     WebcamPagination,
     ModalView,
     WebcamTags,
+    Loader,
   },
   props: {
     webcams: {
@@ -48,6 +51,7 @@ export default {
   },
   computed: {
     ...mapGetters('webcams', ['webcamCurrentPage', 'webcamPerPage', 'webcamCounter']),
+    ...mapGetters('loaders', ['isWebcamsLoader']),
     isSearchExists() {
       return Boolean(this.webcams.length);
     },
@@ -73,3 +77,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+  .search-list{
+    position: relative;
+  }
+</style>

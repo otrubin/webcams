@@ -1,5 +1,5 @@
 <template>
-  <div class="loader" v-if="isShowLoader">
+  <div class="loader" v-bind:style="position" v-if="isShowLoader">
     <b-spinner type="grow" variant="ligth" label="Loading..."></b-spinner>
   </div>
 </template>
@@ -10,13 +10,21 @@ export default {
   name: 'Loader',
   props: {
     isShowLoader: Boolean,
+    isFixed: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    position() {
+      return this.isFixed ? { position: 'fixed' } : { position: 'absolute' };
+    },
   },
 };
 </script>
 
 <style scoped>
   .loader{
-    position: fixed;
     z-index: 100;
     top: 0;
     left: 0;

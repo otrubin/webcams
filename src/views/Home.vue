@@ -17,8 +17,6 @@
 import { mapGetters, mapActions } from 'vuex';
 import SearchSidebar from '@/components/SearchSidebar.vue';
 import SearchList from '@/components/SearchList.vue';
-// import VueLodash from 'vue-lodash';
-import lodash from 'lodash';
 
 export default {
   name: 'Favorite',
@@ -40,10 +38,6 @@ export default {
       }
       this.fetchWebcams(selectedRegionId);
     },
-  },
-  created() {
-    console.log(lodash.random(20));
-    console.log(lodash.cloneDeep);
   },
 };
 </script>
